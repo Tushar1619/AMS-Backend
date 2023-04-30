@@ -1,17 +1,22 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-const app = express();
 import * as dotenv from 'dotenv'
 dotenv.config();
+import auth from './routes/auth.mjs'
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/',(req,res)=>{
-res.send("Hello World surbhit thakur");
 
+
+app.get('/', (req, res) => {
+    res.send("Hello World");
 })
+
+
+app.use('/api/auth', auth);
 
 
 
@@ -43,6 +48,6 @@ process.on('SIGINT', () => {
 
 
 
-app.listen(5000,()=>{
+app.listen(5000, () => {
     console.log("Listening on port 5000");
 })
