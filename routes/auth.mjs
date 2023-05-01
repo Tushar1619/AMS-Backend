@@ -7,10 +7,15 @@ import bcrypt from "bcryptjs";
 import * as dotenv from 'dotenv'
 dotenv.config();
 
+import jwt from 'jsonwebtoken'
+
+const jwt_key = 'jwtsecret';
+
 //logan paul
 router.post('/teacher/createuser',[
     body('email').isEmail().withMessage('Not a valid email'),
-    body('name').isLength({min:3}).withMessage('Name should be atleast 3 characters')
+    body('name').isLength({min:3}).withMessage('Name should be atleast 3 characters'),
+    body('password').isLength({min:8}).withMessage('Password length is less than 8')
 ], (req, res) => {
 
 
@@ -27,8 +32,9 @@ router.post('/teacher/createuser',[
 
 
     //add the user if not present already
-    console.log(req.body.email);
-    res.send("Hi from logan paul");
+
+    var token = jwt.sign({uid:req.body.email}, jwt_key);
+    res.json({token});
 })
 
 
