@@ -8,11 +8,11 @@ const letterSchema=new Schema(
             type: Number,
             required: true
         },
-        title: {
+        subject: {
             type: String,
             required:true
         },
-        body: {
+        description: {
             type: String,
             required:true
         },
