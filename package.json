@@ -18,5 +18,13 @@
     "express-validator": "^7.0.1",
     "mongoose": "^7.1.0",
     "nodemon": "^2.0.22"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triptisingla/AMS-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/triptisingla/AMS-Backend/issues"
+  },
+  "homepage": "https://github.com/triptisingla/AMS-Backend#readme"
 }
