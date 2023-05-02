@@ -3,7 +3,7 @@ const { Schema } = mongoose
 
 const timetableSchema=new Schema(
     {
-        class:
+        classs:
         {
             type: String,
             required: true
