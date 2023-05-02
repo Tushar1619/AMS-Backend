@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv'
 dotenv.config();
 import auth from './routes/auth.mjs'
 import leaves from './routes/leaves.mjs'
-
+import timetable from './routes/timetableapi.mjs'
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', auth);
 app.use('/api/leaveapplication', leaves);
+app.use('/api/timetable', timetable);
 
 
 
