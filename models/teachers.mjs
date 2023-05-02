@@ -7,6 +7,7 @@ const teacherSchema = new Schema(
         //     first:{type:'String', required:true},
         //     last:{type:'String', required:true},
         // },   this or this
+       
         firstName: {
             type: String,
             required: true
@@ -36,7 +37,6 @@ const teacherSchema = new Schema(
             lowercase: true,
             unique: true,
             required: 'Email address is required',
-            validate: [validateEmail, 'Please fill a valid email address'],
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
         },
         firstTime: {
@@ -47,4 +47,6 @@ const teacherSchema = new Schema(
     }
 )
 
-const Teacher = mongoose.model('TeacherSchema', teacherSchema);
+const teacherModel = mongoose.model('TeacherSchema', teacherSchema);
+
+export default teacherModel;
