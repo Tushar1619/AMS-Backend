@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
-require('mongoose-type-url');
+// require('mongoose-type-url');
 
 const letterSchema=new Schema(
     {
@@ -11,7 +11,7 @@ const letterSchema=new Schema(
         enrollmentNo: {
             type: Number,
             required: true
-        },
+        },  //no need of enrollment no
         subject: {
             type: String,
             required:true
@@ -22,16 +22,19 @@ const letterSchema=new Schema(
         },
         date:{
             type: Date,
-            required: true
+            default: Date.now
         },
         hidden: Boolean,
-        url: {
-            type: mongoose.SchemaTypes.Url, 
-            required: true
-        },
+        // url: {
+        //     type: mongoose.SchemaTypes.Url, 
+        // },
         agreed: {
             type: Boolean,
             required: true
         }
 
     })
+
+    const lettersModel=mongoose.model('LetterSchema',letterSchema)
+    export default lettersModel;
+
