@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv'
 dotenv.config();
 import auth from './routes/auth.mjs'
+import leaves from './routes/leaves.mjs'
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/auth', auth);
+app.use('/api/leaveapplication', leaves);
 
 
 
