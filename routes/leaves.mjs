@@ -31,7 +31,10 @@ router.post('/addleave', [
             }
 
             const data = jwt.verify(token, jwt_key);
-            console.log(data);
+            // console.log(data);
+            let department = await teacherModel.findOne({_id:data.user.id});
+            department = department.department;
+            console.log(department);
             let leaveLetter = {
                 user: data.user.id,
                 enrollmentNo: t_id,
@@ -39,11 +42,12 @@ router.post('/addleave', [
                 description: desc,
                 // url: url,
                 agreed: false,
+                department
             }
             // console.log(leaveLetter);
 
             let createdLetter = await lettersModel.create(leaveLetter);
-            res.send(createdLetter);
+            res.json({createdLetter});
         }
         catch (err) {
             console.log(err.message);
@@ -70,7 +74,8 @@ router.get('/checkleaves', async (req, res) => {
     }
 
     try {
-        const activeLeaves = await lettersModel.find({ agreed: false });
+
+        const activeLeaves = await lettersModel.find({ agreed: false,department:["ece"]});
         res.json(activeLeaves);
     }
     catch (e) {

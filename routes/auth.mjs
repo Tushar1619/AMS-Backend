@@ -38,6 +38,7 @@ router.post('/teacher/createuser', [
         t_id,
         mobNo,
         email,
+        department
     } = req.body;
 
     let newUser = {
@@ -47,6 +48,7 @@ router.post('/teacher/createuser', [
         mobNo,
         email,
         password: hash,
+        department,
         hidden: false,
         firstTime: false,
         designation:"base"

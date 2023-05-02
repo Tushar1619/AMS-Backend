@@ -43,6 +43,10 @@ const teacherSchema = new Schema(
             type: Boolean,
             default: false
         },
+        department:{
+            type:Array,
+            required:true
+        },
         designation:{
             type:String,
             required:true

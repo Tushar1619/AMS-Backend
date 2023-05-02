@@ -31,7 +31,11 @@ const letterSchema=new Schema(
         agreed: {
             type: Boolean,
             required: true
-        }
+        },
+        department:{
+            type:Array,
+            required:true,
+        },
 
     })
 
