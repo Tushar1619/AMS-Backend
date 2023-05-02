@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import { body, validationResult } from 'express-validator';
 import lettersModel from '../models/letter.mjs'
+import teacherModel from '../models/teachers.mjs'
 
 import * as dotenv from 'dotenv'
 dotenv.config();
@@ -32,7 +33,7 @@ router.post('/addleave', [
             const data = jwt.verify(token, jwt_key);
             console.log(data);
             let leaveLetter = {
-                user:data.user.id,
+                user: data.user.id,
                 enrollmentNo: t_id,
                 subject: sub,
                 description: desc,
@@ -50,5 +51,32 @@ router.post('/addleave', [
         }
     }
 )
+
+
+router.get('/checkleaves', async (req, res) => {
+    const token = req.header('auth-token')
+    const data = jwt.verify(token, jwt_key);
+    const personId = data.user.id;
+
+    try {
+        const person = await teacherModel.findOne({ _id: personId });
+        if (person.designation !== 'hod') {
+            res.json({ message: "You dont have access to this information" });
+
+        }
+    }
+    catch (e) {
+        res.json({ messgae: "Internal sever error!" });
+    }
+
+    try {
+        const activeLeaves = await lettersModel.find({ agreed: false });
+        res.json(activeLeaves);
+    }
+    catch (e) {
+        res.json({ messgae: "Internal sever error!" });
+    }
+
+})
 
 export default router;
