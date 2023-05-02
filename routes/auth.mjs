@@ -38,7 +38,6 @@ router.post('/teacher/createuser', [
         t_id,
         mobNo,
         email,
-        password
     } = req.body;
 
     let newUser = {
@@ -49,7 +48,8 @@ router.post('/teacher/createuser', [
         email,
         password: hash,
         hidden: false,
-        firstTime: false
+        firstTime: false,
+        designation:"base"
     }
     //check if the user exists in the db
     try {

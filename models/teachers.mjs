@@ -42,6 +42,10 @@ const teacherSchema = new Schema(
         firstTime: {
             type: Boolean,
             default: false
+        },
+        designation:{
+            type:String,
+            required:true
         }
 
     }
