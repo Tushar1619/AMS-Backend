@@ -23,7 +23,7 @@ const studentSchema = new Schema(
             type: Number,
             required: true
         },
-        class: {
+        classs: {
             type: String,
             required: true
         },
@@ -33,7 +33,7 @@ const studentSchema = new Schema(
         },
         date: { type: Date, default: Date.now },
         hidden: Boolean,
-        _someId: { type: Schema.Types.ObjectId },
+        // _someId: { type: Schema.Types.ObjectId },
         password: {
             type: String,
             required: true
@@ -44,7 +44,7 @@ const studentSchema = new Schema(
             lowercase: true,
             unique: true,
             required: 'Email address is required',
-            validate: [validateEmail, 'Please fill a valid email address'],
+            // validate: [validateEmail, 'Please fill a valid email address'],
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
         },
         firstTime: {
@@ -55,4 +55,7 @@ const studentSchema = new Schema(
     }
 )
 
-const Student = mongoose.model('StudentSchema', studentSchema);
+const studentModel = mongoose.model('StudentSchema', studentSchema);
+
+
+export default studentModel;
