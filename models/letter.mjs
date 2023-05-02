@@ -4,15 +4,19 @@ require('mongoose-type-url');
 
 const letterSchema=new Schema(
     {
+        user:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'teacherModel'
+        },
         t_id: {
             type: Number,
             required: true
         },
-        title: {
+        subject: {
             type: String,
             required:true
         },
-        body: {
+        description: {
             type: String,
             required:true
         },
