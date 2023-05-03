@@ -3,6 +3,8 @@ const router = express.Router();
 import { body, validationResult } from 'express-validator';
 
 import bcrypt from "bcryptjs";
+import CryptoJS from "crypto-js";
+
 
 import * as dotenv from 'dotenv'
 dotenv.config();
@@ -28,8 +30,9 @@ router.post('/teacher/createuser', [
 
     }
 
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(req.body.password, salt);
+    // let salt = bcrypt.genSaltSync(10);
+    // let hash = bcrypt.hashSync(req.body.password, salt);
+    const cipherpass = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
 
 
     let {
@@ -47,7 +50,8 @@ router.post('/teacher/createuser', [
         t_id,
         mobNo,
         email,
-        password: hash,
+        // password: hash,
+        password:cipherpass,
         department,
         hidden: false,
         firstTime: false,
@@ -101,7 +105,9 @@ router.post('/teacher/login', [
     try {
         const user = await teacherModel.findOne({ email });
         //password match
-        const pass_match = bcrypt.compareSync(password, user.password);
+        // const pass_match = bcrypt.compareSync(password, user.password);
+        const pass_match=(password==CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
+
         if (!pass_match) {
             res.json({ message: "Password does not match please use correct password!" })
         }
@@ -130,8 +136,9 @@ router.post('/student/createuser', [
 
     }
 
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(req.body.password, salt);
+    // let salt = bcrypt.genSaltSync(10);
+    // let hash = bcrypt.hashSync(req.body.password, salt);
+    const cipherpass = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
 
 
     let {
@@ -153,7 +160,8 @@ router.post('/student/createuser', [
         classs,
         section,
         email,
-        password: hash,
+        // password: hash,
+        password: cipherpass,
         hidden: false,
         firstTime: false
     }
@@ -210,7 +218,9 @@ router.post('/student/login', [
     try {
         const user = await studentModel.findOne({ email });
         //password match
-        const pass_match = bcrypt.compareSync(password, user.password);
+        // const pass_match = bcrypt.compareSync(password, user.password);
+        const pass_match=(password==CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
+
         if (!pass_match) {
             res.json({ message: "Password does not match please use correct password!" })
         }
@@ -224,5 +234,51 @@ router.post('/student/login', [
     }
 
 })
+
+
+router.post('/teacher/forgetpassword',[
+    body('email').isEmail().withMessage('Not a valid email'),
+    body('mobNo').isMobilePhone().withMessage('Not a valid phone number')
+],
+async (req,res)=>{
+    const { email, mobNo } = req.body;
+    
+    try{
+        const user = await teacherModel.findOne({ email,mobNo });
+        if(user)
+        {
+            const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
+            res.send(yourPass);
+        }
+    }
+    catch(e){
+        res.send("user doesn't exist");
+    }
+    
+})
+
+
+router.post('/student/forgetpassword',[
+    body('email').isEmail().withMessage('Not a valid email'),
+    body('mobNo').isMobilePhone().withMessage('Not a valid phone number')
+],
+async (req,res)=>{
+    const { email, mobNo } = req.body;
+
+    try{
+        const user = await studentModel.findOne({ email,mobNo });
+        if(user)
+        {
+            const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
+            res.send(yourPass);
+        }
+    }
+    catch(e){
+        res.send("user doesn't exist")
+    }
+    
+})
+
+
 
 export default router;
