@@ -57,6 +57,8 @@ router.post('/addleave', [
 )
 
 
+
+//for hods
 router.get('/checkleaves', async (req, res) => {
     const token = req.header('auth-token')
     const data = jwt.verify(token, jwt_key);
@@ -75,7 +77,7 @@ router.get('/checkleaves', async (req, res) => {
 
     try {
 
-        const activeLeaves = await lettersModel.find({ agreed: false,department:["ece"]});
+        const activeLeaves = await lettersModel.find({ agreed: false,department:["cse"]});
         res.json(activeLeaves);
     }
     catch (e) {

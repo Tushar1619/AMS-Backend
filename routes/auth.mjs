@@ -76,11 +76,6 @@ router.post('/teacher/createuser', [
     catch (e) {
         res.json({ error: "Internal server error!" });
     }
-
-
-
-
-
 })
 
 
