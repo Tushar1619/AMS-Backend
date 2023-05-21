@@ -15,7 +15,8 @@ router.post('/addleave', [
     body('desc', 'Description length should be greater than 10 characters').isLength({ min: 11 }),
 ],
     async (req, res) => {
-        const { sub, desc, url, t_id } = req.body;
+
+        const { sub, desc, url, t_id, from, till } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -42,6 +43,8 @@ router.post('/addleave', [
                 description: desc,
                 // url: url,
                 agreed: false,
+                startDate:from,
+                endDate:till,
                 department
             }
             // console.log(leaveLetter);
