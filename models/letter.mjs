@@ -20,6 +20,12 @@ const letterSchema=new Schema(
             type: String,
             required:true
         },
+        startDate:{
+            type:Date,
+        },
+        endDate:{
+            type:Date,
+        },
         date:{
             type: Date,
             default: Date.now
