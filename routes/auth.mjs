@@ -51,11 +51,11 @@ router.post('/teacher/createuser', [
         mobNo,
         email,
         // password: hash,
-        password:cipherpass,
+        password: cipherpass,
         department,
         hidden: false,
         firstTime: false,
-        designation:"base"
+        designation: "base"
     }
     //check if the user exists in the db
     try {
@@ -106,10 +106,11 @@ router.post('/teacher/login', [
         const user = await teacherModel.findOne({ email });
         //password match
         // const pass_match = bcrypt.compareSync(password, user.password);
-        const pass_match=(password==CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
+        const pass_match = (password == CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
 
         if (!pass_match) {
             res.json({ message: "Password does not match please use correct password!" })
+            return;
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
         res.json({ message: "Successfully logged in", token });
@@ -219,7 +220,7 @@ router.post('/student/login', [
         const user = await studentModel.findOne({ email });
         //password match
         // const pass_match = bcrypt.compareSync(password, user.password);
-        const pass_match=(password==CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
+        const pass_match = (password == CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
 
         if (!pass_match) {
             res.json({ message: "Password does not match please use correct password!" })
@@ -236,48 +237,51 @@ router.post('/student/login', [
 })
 
 
-router.post('/teacher/forgetpassword',[
-    body('email').isEmail().withMessage('Not a valid email'),
-    body('mobNo').isMobilePhone().withMessage('Not a valid phone number')
-],
-async (req,res)=>{
-    const { email, mobNo } = req.body;
-    
-    try{
-        const user = await teacherModel.findOne({ email,mobNo });
-        if(user)
-        {
-            const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
-            res.send(yourPass);
+router.post('/teacher/forgetpassword',
+    async (req, res) => {
+        const { email, mobNo } = req.body;
+        try {
+            const user = await teacherModel.findOne({ email, mobNo });
+            if (user) {
+                const newPass = req.body.password;
+                const encPass = CryptoJS.AES.encrypt(newPass, process.env.SECRET_KEY).toString();
+                // const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
+                // res.send(yourPass);
+                user.password = encPass;
+                const updatedUser = await teacherModel.replaceOne({ email,mobNo }, user);
+                res.json({ message: "userUpdated" });
+            }
         }
-    }
-    catch(e){
-        res.send("user doesn't exist");
-    }
-    
-})
-
-
-router.post('/student/forgetpassword',[
-    body('email').isEmail().withMessage('Not a valid email'),
-    body('mobNo').isMobilePhone().withMessage('Not a valid phone number')
-],
-async (req,res)=>{
-    const { email, mobNo } = req.body;
-
-    try{
-        const user = await studentModel.findOne({ email,mobNo });
-        if(user)
-        {
-            const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
-            res.send(yourPass);
+        catch (e) {
+            res.send("user doesn't exist");
         }
-    }
-    catch(e){
-        res.send("user doesn't exist")
-    }
-    
-})
+
+    })
+
+
+router.post('/student/forgetpassword',
+    async (req, res) => {
+        const { email, mobNo } = req.body;
+
+        try {
+            const user = await studentModel.findOne({ email, mobNo });
+            if (user) {
+                const newPass = req.body.password;
+                const encPass = CryptoJS.AES.encrypt(newPass, process.env.SECRET_KEY).toString();
+
+                // const yourPass=CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
+                // res.send(yourPass);
+                user.password = encPass;
+                const updatedUser = await studentModel.replaceOne({ email, mobNo }, user);
+                res.json({ message: "updatedUser" });
+
+            }
+        }
+        catch (e) {
+            res.send("user doesn't exist")
+        }
+
+    })
 
 
 
