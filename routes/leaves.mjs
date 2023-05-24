@@ -16,7 +16,7 @@ router.post('/addleave', [
 ],
     async (req, res) => {
 
-        const { sub, desc, url, t_id, from, till } = req.body;
+        const { sub, desc, url, t_id, startDate, endDate } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -43,8 +43,8 @@ router.post('/addleave', [
                 description: desc,
                 // url: url,
                 agreed: false,
-                startDate:from,
-                endDate:till,
+                startDate,
+                endDate,
                 department
             }
             // console.log(leaveLetter);
