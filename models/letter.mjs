@@ -8,6 +8,10 @@ const letterSchema=new Schema(
             type:mongoose.Schema.Types.ObjectId,
             ref:'teacherModel'
         },
+        name:{
+            type: String,
+            required:true
+        },
         t_id: {
             type: Number,
             required: true

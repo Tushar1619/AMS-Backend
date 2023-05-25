@@ -41,7 +41,8 @@ router.post('/teacher/createuser', [
         t_id,
         mobNo,
         email,
-        department
+        department,
+        designation
     } = req.body;
 
     let newUser = {
@@ -55,7 +56,7 @@ router.post('/teacher/createuser', [
         department,
         hidden: false,
         firstTime: false,
-        designation: "base"
+        designation
     }
     //check if the user exists in the db
     try {
@@ -113,6 +114,7 @@ router.post('/teacher/login', [
             return;
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
+        console.log(user)
         res.json({ message: "Successfully logged in", token });
 
     }
