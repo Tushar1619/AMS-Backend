@@ -51,7 +51,8 @@ router.post('/addleave', [
                 agreed: false,
                 startDate,
                 endDate,
-                department
+                department,
+                name:teacher.firstName
             }
             // console.log(leaveLetter);
 
@@ -70,11 +71,14 @@ router.post('/addleave', [
 //for hods
 router.get('/checkleaves', async (req, res) => {
     const token = req.header('auth-token')
+    // console.log(token);
     const data = jwt.verify(token, jwt_key);
     const personId = data.user.id;
-
+    let department;
     try {
         const person = await teacherModel.findOne({ _id: personId });
+        department=person.department
+        console.log(department)
         if (person.designation !== 'hod') {
             res.json({ message: "You dont have access to this information" });
 
@@ -85,8 +89,9 @@ router.get('/checkleaves', async (req, res) => {
     }
 
     try {
-
-        const activeLeaves = await lettersModel.find({ agreed: false,department:["cse"]});
+        
+        const activeLeaves = await lettersModel.find({ agreed: false,department:{$in: department}});
+        console.log(activeLeaves)
         res.json(activeLeaves);
     }
     catch (e) {
