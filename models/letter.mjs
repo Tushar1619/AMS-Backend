@@ -8,7 +8,7 @@ const letterSchema=new Schema(
             type:mongoose.Schema.Types.ObjectId,
             ref:'teacherModel'
         },
-        enrollmentNo: {
+        t_id: {
             type: Number,
             required: true
         },  //no need of enrollment no
