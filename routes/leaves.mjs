@@ -15,7 +15,8 @@ router.post('/addleave', [
     body('desc', 'Description length should be greater than 10 characters').isLength({ min: 11 }),
 ],
     async (req, res) => {
-        const { sub, desc, url, t_id } = req.body;
+
+        const { from,sub, desc, startDate, endDate } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -31,17 +32,26 @@ router.post('/addleave', [
             }
 
             const data = jwt.verify(token, jwt_key);
-            // console.log(data);
-            let department = await teacherModel.findOne({_id:data.user.id});
-            department = department.department;
+            console.log(data);
+            let teacher = await teacherModel.findOne({_id:data.user.id});
+            console.log(teacher);
+            console.log(from);
+            if(teacher.firstName!=from)
+            {
+                return res.status(403).json({message: "you are not authenticated to write this leave"})
+            }
+            const t_id=teacher.t_id;
+            const department = teacher.department;
             console.log(department);
             let leaveLetter = {
                 user: data.user.id,
-                enrollmentNo: t_id,
+                t_id,
                 subject: sub,
                 description: desc,
                 // url: url,
                 agreed: false,
+                startDate,
+                endDate,
                 department
             }
             // console.log(leaveLetter);

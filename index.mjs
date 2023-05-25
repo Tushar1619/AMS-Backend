@@ -24,6 +24,7 @@ app.use('/api/timetable', timetable);
 
 
 let dbURI = process.env.MONGO_URL
+// console.log(dbURI);
 mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', () => {
