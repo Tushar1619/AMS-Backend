@@ -26,23 +26,22 @@ router.post('/addleave', [
         try {
 
             const token = req.header('auth-token')
-            console.log(token);
+            // console.log(token);
             if (!token) {
                 return res.status(401).send("Please authenticate with valid auth-token")
             }
 
             const data = jwt.verify(token, jwt_key);
-            console.log(data);
+            // console.log(data);
             let teacher = await teacherModel.findOne({_id:data.user.id});
-            console.log(teacher);
-            console.log(from);
-            if(teacher.firstName!=from)
+            // console.log(teacher);
+            if(teacher.firstName.trim().toLowerCase()!==from.trim().toLowerCase())
             {
                 return res.status(403).json({message: "you are not authenticated to write this leave"})
             }
             const t_id=teacher.t_id;
             const department = teacher.department;
-            console.log(department);
+            // console.log(department);
             let leaveLetter = {
                 user: data.user.id,
                 t_id,
