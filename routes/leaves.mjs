@@ -26,23 +26,22 @@ router.post('/addleave', [
         try {
 
             const token = req.header('auth-token')
-            console.log(token);
+            // console.log(token);
             if (!token) {
                 return res.status(401).send("Please authenticate with valid auth-token")
             }
 
             const data = jwt.verify(token, jwt_key);
-            console.log(data);
+            // console.log(data);
             let teacher = await teacherModel.findOne({_id:data.user.id});
-            console.log(teacher);
-            console.log(from);
-            if(teacher.firstName!=from)
+            // console.log(teacher);
+            if(teacher.firstName.trim().toLowerCase()!==from.trim().toLowerCase())
             {
                 return res.status(403).json({message: "you are not authenticated to write this leave"})
             }
             const t_id=teacher.t_id;
             const department = teacher.department;
-            console.log(department);
+            // console.log(department);
             let leaveLetter = {
                 user: data.user.id,
                 t_id,
@@ -52,7 +51,8 @@ router.post('/addleave', [
                 agreed: false,
                 startDate,
                 endDate,
-                department
+                department,
+                name:teacher.firstName
             }
             // console.log(leaveLetter);
 
@@ -71,11 +71,14 @@ router.post('/addleave', [
 //for hods
 router.get('/checkleaves', async (req, res) => {
     const token = req.header('auth-token')
+    // console.log(token);
     const data = jwt.verify(token, jwt_key);
     const personId = data.user.id;
-
+    let department;
     try {
         const person = await teacherModel.findOne({ _id: personId });
+        department=person.department
+        console.log(department)
         if (person.designation !== 'hod') {
             res.json({ message: "You dont have access to this information" });
 
@@ -86,8 +89,9 @@ router.get('/checkleaves', async (req, res) => {
     }
 
     try {
-
-        const activeLeaves = await lettersModel.find({ agreed: false,department:["cse"]});
+        
+        const activeLeaves = await lettersModel.find({ agreed: false,department:{$in: department}});
+        console.log(activeLeaves)
         res.json(activeLeaves);
     }
     catch (e) {
