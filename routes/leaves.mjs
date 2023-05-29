@@ -78,10 +78,10 @@ router.get('/checkleaves', async (req, res) => {
     try {
         const person = await teacherModel.findOne({ _id: personId });
         department=person.department
-        console.log(department)
+        // console.log(department)
         if (person.designation !== 'hod') {
-            res.json({ message: "You dont have access to this information" });
-
+            res.json({ message: "You dont have access to this information",access:false});
+            return ;
         }
     }
     catch (e) {
