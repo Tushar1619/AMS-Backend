@@ -115,7 +115,7 @@ router.post('/teacher/login', [
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
         console.log(user)
-        res.json({ message: "Successfully logged in", token });
+        res.json({ message: "Successfully logged in", token,user});
 
     }
 
@@ -125,23 +125,6 @@ router.post('/teacher/login', [
 
 })
 
-router.get('/teacher/creds', async (req,res)=>{
-    const token = req.header('auth-token')
-    console.log(token);
-    const data = jwt.verify(token, jwt_key);
-    const personId = data.user.id;
-    try {
-        const person = await teacherModel.findOne({ _id: personId });
-        console.log(person);
-        if(person){
-            res.json({message:"User exists",person});
-        }
-    }
-    catch (e) {
-        res.json({ messgae: "Internal sever error!" });
-    }
-
-})
 
 
 router.post('/student/createuser', [
