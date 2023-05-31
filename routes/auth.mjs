@@ -133,17 +133,15 @@ router.post('/student/createuser', [
     body('password').isLength({ min: 8 }).withMessage('Password length is less than 8')
 ], async (req, res) => {
 
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
-
     }
-
+    
     // let salt = bcrypt.genSaltSync(10);
     // let hash = bcrypt.hashSync(req.body.password, salt);
     const cipherpass = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
-
+    
 
     let {
         firstName,
@@ -153,9 +151,9 @@ router.post('/student/createuser', [
         classs,
         section,
         email,
-
+        year
     } = req.body;
-
+    
     let newUser = {
         firstName,
         lastName,
@@ -167,11 +165,15 @@ router.post('/student/createuser', [
         // password: hash,
         password: cipherpass,
         hidden: false,
-        firstTime: false
+        firstTime: false,
+        year
     }
+    // console.log("newuser is :",newUser)
+    
     //check if the user exists in the db
     try {
         const hasUser = await studentModel.findOne({ email });
+        // console.log(hasUser)
         if (hasUser) {
             res.json({ message: "User already exists" });
         }
@@ -184,7 +186,7 @@ router.post('/student/createuser', [
     try {
         //add the user if not present already
         const user = await studentModel.create(newUser);
-
+        // console.log(user)
         let token = jwt.sign({ user: { id: user._id } }, jwt_key);
         res.json({ message: "User created", token })
     }
@@ -229,7 +231,7 @@ router.post('/student/login', [
             res.json({ message: "Password does not match please use correct password!" })
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
-        res.json({ message: "Successfully logged in", token });
+        res.json({ message: "Successfully logged in", token,user });
 
     }
 

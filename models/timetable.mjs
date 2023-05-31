@@ -13,11 +13,11 @@ const timetableSchema=new Schema(
             type: String,
             required: true
         },
-        sem:
-        {
-            type: Number,
-            required: true
-        },
+        // sem:
+        // {
+        //     type: Number,
+        //     required: true
+        // },
         year:
         {
             type: Number,
