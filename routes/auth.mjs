@@ -115,7 +115,7 @@ router.post('/teacher/login', [
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
         console.log(user)
-        res.json({ message: "Successfully logged in", token });
+        res.json({ message: "Successfully logged in", token,user});
 
     }
 
@@ -124,6 +124,7 @@ router.post('/teacher/login', [
     }
 
 })
+
 
 
 router.post('/student/createuser', [
