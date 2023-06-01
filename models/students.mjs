@@ -31,7 +31,12 @@ const studentSchema = new Schema(
             type: String,
             required: true
         },
+        year: {
+            type: Number,
+            required: true
+        },
         date: { type: Date, default: Date.now },
+        
         hidden: Boolean,
         // _someId: { type: Schema.Types.ObjectId },
         password: {
@@ -51,6 +56,7 @@ const studentSchema = new Schema(
             type: Boolean,
             default: false
         }
+        
 
     }
 )
