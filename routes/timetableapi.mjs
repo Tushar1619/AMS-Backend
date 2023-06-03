@@ -10,10 +10,10 @@ import timetableModel from '../models/timetable.mjs'
 //rajesh johnson
 router.post('/addtimetable',
     async (req, res) => {
-        const { classs, section, sem, year, mon, tue, wed, thu, fri, sat } = req.body;
+        const { classs, section, year, mon, tue, wed, thu, fri, sat } = req.body;
 
         const timetable = {
-            classs, section, sem, year, mon, tue, wed, thu, fri, sat
+            classs, section, year, mon, tue, wed, thu, fri, sat
         }
         console.log(timetable);
         const updatedtt = await timetableModel.create(timetable);
@@ -22,9 +22,16 @@ router.post('/addtimetable',
     }
 )
 
-router.get('/timetable/:class/:sec/:sem',
+router.get('/',
    async (req, res) => {
-        const ttToShow = await timetableModel.findOne({classs:req.params.class,section:req.params.sec,sem:req.params.sem}) ;
+    const {query}=req;
+    // console.log(query)
+        const ttToShow = await timetableModel.findOne(query) ;
+        console.log(ttToShow)
+        if(!ttToShow)
+        {
+            return res.json({message:"tt not found"})
+        }
         const days = {
             mon:ttToShow.mon,
             tue:ttToShow.tue,
