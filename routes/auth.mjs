@@ -62,12 +62,12 @@ router.post('/teacher/createuser', [
     try {
         const hasUser = await teacherModel.findOne({ email });
         if (hasUser) {
-            res.json({ message: "User already exists" });
+           return  res.json({ message: "User already exists" });
         }
     }
     catch (e) {
-        res.json({ error: "Internal server error!" });
-        res.json({ message: "User successfully created" });
+        return res.json({ error: "Internal server error!" });
+        // res.json({ message: "User successfully created" });
     }
 
     try {
@@ -76,10 +76,10 @@ router.post('/teacher/createuser', [
         const user = await teacherModel.create(newUser);
 
         let token = jwt.sign({ user: { id: user._id } }, jwt_key);
-        res.json({ message: "User created", token })
+        return  res.json({ message: "User created", token })
     }
     catch (e) {
-        res.json({ error: "Internal server error!" });
+        return res.json({ error: "Internal server error!" });
     }
 })
 
@@ -175,12 +175,12 @@ router.post('/student/createuser', [
         const hasUser = await studentModel.findOne({ email });
         // console.log(hasUser)
         if (hasUser) {
-            res.json({ message: "User already exists" });
+           return  res.json({ message: "User already exists" });
         }
     }
     catch (e) {
-        res.json({ error: "Internal server error!" });
-        res.json({ message: "User successfully created" });
+       return  res.json({ error: "Internal server error!" });
+        // res.json({ message: "User successfully created" });
     }
 
     try {
@@ -188,10 +188,10 @@ router.post('/student/createuser', [
         const user = await studentModel.create(newUser);
         // console.log(user)
         let token = jwt.sign({ user: { id: user._id } }, jwt_key);
-        res.json({ message: "User created", token })
+        return res.json({ message: "User created", token })
     }
     catch (e) {
-        res.json({ error: "Internal server error!" });
+        return res.json({ error: "Internal server error!" });
     }
 
 
@@ -228,7 +228,7 @@ router.post('/student/login', [
         const pass_match = (password == CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8));
 
         if (!pass_match) {
-            res.json({ message: "Password does not match please use correct password!" })
+           return res.json({ message: "Password does not match please use correct password!" })
         }
         var token = jwt.sign({ user: { id: user._id } }, jwt_key);
         res.json({ message: "Successfully logged in", token,user });
